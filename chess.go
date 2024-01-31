@@ -196,23 +196,57 @@ func GetQueenMoves(fromCell BitBoard) BitBoard {
 
 func GetBishopMoves(fromCell BitBoard) BitBoard {
 	var bb BitBoard = 0
-	// todo
-	return bb
+
+	du := DIAGONAL_UP
+	dd := DIAGONAL_DOWN
+	if du&fromCell != 0 {
+		bb |= du
+	}
+	if dd&fromCell != 0 {
+		bb |= dd
+	}
+	for i := 0; i < 7; i++ {
+		du >>= 1
+		du &= ALL_CELLS ^ FILE_H
+		dd >>= 1
+		dd &= ALL_CELLS ^ FILE_H
+		if du&fromCell != 0 {
+			bb |= du
+		}
+		if dd&fromCell != 0 {
+			bb |= dd
+		}
+	}
+	du = DIAGONAL_UP
+	dd = DIAGONAL_DOWN
+	for i := 0; i < 7; i++ {
+		du <<= 1
+		du &= ALL_CELLS ^ FILE_A
+		dd <<= 1
+		dd &= ALL_CELLS ^ FILE_A
+		if du&fromCell != 0 {
+			bb |= du
+		}
+		if dd&fromCell != 0 {
+			bb |= dd
+		}
+	}
+	return bb ^ fromCell // todo: fix bug if 2 bishops on same diagonal
 }
 
 func GetRookMoves(fromCell BitBoard) BitBoard {
 	var bb BitBoard = 0
 	for rank := RANK_1; rank != 0; rank <<= 8 {
 		if fromCell&rank != 0 {
-			bb |= rank
+			bb |= rank ^ (fromCell & rank)
 		}
 	}
 	for file := FILE_A; file != 0; file <<= 1 {
 		if fromCell&file != 0 {
-			bb |= file
+			bb |= file ^ (fromCell & file)
 		}
 	}
-	return bb ^ fromCell
+	return bb
 }
 
 func GetKnightMoves(fromCell BitBoard) BitBoard {

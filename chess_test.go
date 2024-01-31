@@ -35,7 +35,7 @@ func TestBishopMoves(t *testing.T) {
 	var difference BitBoard = (expectedMoves ^ actualMoves)
 
 	if expectedMoves != actualMoves {
-		t.Errorf("Knights Placements:\n%s\nExpected:\n%s\nGot:\n%s\nDifference:\n%s\n", fromCell.Visualize(), expectedMoves.Visualize(), actualMoves.Visualize(), difference.Visualize())
+		t.Errorf("Bishops Placements:\n%s\nExpected:\n%s\nGot:\n%s\nDifference:\n%s\n", fromCell.Visualize(), expectedMoves.Visualize(), actualMoves.Visualize(), difference.Visualize())
 	}
 }
 
@@ -47,6 +47,6 @@ func TestRookMoves(t *testing.T) {
 	var difference BitBoard = (expectedMoves ^ actualMoves)
 
 	if expectedMoves != actualMoves {
-		t.Errorf("Knights Placements:\n%s\nExpected:\n%s\nGot:\n%s\nDifference:\n%s\n", fromCell.Visualize(), expectedMoves.Visualize(), actualMoves.Visualize(), difference.Visualize())
+		t.Errorf("Rooks Placements:\n%s\nExpected:\n%s\nGot:\n%s\nDifference:\n%s\n", fromCell.Visualize(), expectedMoves.Visualize(), actualMoves.Visualize(), difference.Visualize())
 	}
 }
