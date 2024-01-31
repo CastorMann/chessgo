@@ -17,86 +17,99 @@ func (b BitBoard) IsSet(pos uint) bool {
 }
 
 const (
-	A1    BitBoard = 1 << 0
-	B1             = 1 << 1
-	C1             = 1 << 2
-	D1             = 1 << 3
-	E1             = 1 << 4
-	F1             = 1 << 5
-	G1             = 1 << 6
-	H1             = 1 << 7
-	A2             = 1 << 8
-	B2             = 1 << 9
-	C2             = 1 << 10
-	D2             = 1 << 11
-	E2             = 1 << 12
-	F2             = 1 << 13
-	G2             = 1 << 14
-	H2             = 1 << 15
-	A3             = 1 << 16
-	B3             = 1 << 17
-	C3             = 1 << 18
-	D3             = 1 << 19
-	E3             = 1 << 20
-	F3             = 1 << 21
-	G3             = 1 << 22
-	H3             = 1 << 23
-	A4             = 1 << 24
-	B4             = 1 << 25
-	C4             = 1 << 26
-	D4             = 1 << 27
-	E4             = 1 << 28
-	F4             = 1 << 29
-	G4             = 1 << 30
-	H4             = 1 << 31
-	A5             = 1 << 32
-	B5             = 1 << 33
-	C5             = 1 << 34
-	D5             = 1 << 35
-	E5             = 1 << 36
-	F5             = 1 << 37
-	G5             = 1 << 38
-	H5             = 1 << 39
-	A6             = 1 << 40
-	B6             = 1 << 41
-	C6             = 1 << 42
-	D6             = 1 << 43
-	E6             = 1 << 44
-	F6             = 1 << 45
-	G6             = 1 << 46
-	H6             = 1 << 47
-	A7             = 1 << 48
-	B7             = 1 << 49
-	C7             = 1 << 50
-	D7             = 1 << 51
-	E7             = 1 << 52
-	F7             = 1 << 53
-	G7             = 1 << 54
-	H7             = 1 << 55
-	A8             = 1 << 56
-	B8             = 1 << 57
-	C8             = 1 << 58
-	D8             = 1 << 59
-	E8             = 1 << 60
-	F8             = 1 << 61
-	G8             = 1 << 62
-	H8             = 1 << 63
-	ROW_1          = 0x00000000000000FF
-	ROW_2          = 0x000000000000FF00
-	ROW_3          = 0x0000000000FF0000
-	ROW_4          = 0x00000000FF000000
-	ROW_5          = 0x000000FF00000000
-	ROW_6          = 0x0000FF0000000000
-	ROW_7          = 0x00FF000000000000
-	ROW_8          = 0xFF00000000000000
-	COL_A          = A1 | A2 | A3 | A4 | A5 | A6 | A7 | A8
-	COL_B          = B1 | B2 | B3 | B4 | B5 | B6 | B7 | B8
-	COL_C          = C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8
-	COL_D          = D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8
-	COL_E          = E1 | E2 | E3 | E4 | E5 | E6 | E7 | E8
-	COL_F          = F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8
-	COL_G          = G1 | G2 | G3 | G4 | G5 | G6 | G7 | G8
-	COL_H          = H1 | H2 | H3 | H4 | H5 | H6 | H7 | H8
+	A1              BitBoard = 1 << 0
+	B1              BitBoard = 1 << 1
+	C1              BitBoard = 1 << 2
+	D1              BitBoard = 1 << 3
+	E1              BitBoard = 1 << 4
+	F1              BitBoard = 1 << 5
+	G1              BitBoard = 1 << 6
+	H1              BitBoard = 1 << 7
+	A2              BitBoard = 1 << 8
+	B2              BitBoard = 1 << 9
+	C2              BitBoard = 1 << 10
+	D2              BitBoard = 1 << 11
+	E2              BitBoard = 1 << 12
+	F2              BitBoard = 1 << 13
+	G2              BitBoard = 1 << 14
+	H2              BitBoard = 1 << 15
+	A3              BitBoard = 1 << 16
+	B3              BitBoard = 1 << 17
+	C3              BitBoard = 1 << 18
+	D3              BitBoard = 1 << 19
+	E3              BitBoard = 1 << 20
+	F3              BitBoard = 1 << 21
+	G3              BitBoard = 1 << 22
+	H3              BitBoard = 1 << 23
+	A4              BitBoard = 1 << 24
+	B4              BitBoard = 1 << 25
+	C4              BitBoard = 1 << 26
+	D4              BitBoard = 1 << 27
+	E4              BitBoard = 1 << 28
+	F4              BitBoard = 1 << 29
+	G4              BitBoard = 1 << 30
+	H4              BitBoard = 1 << 31
+	A5              BitBoard = 1 << 32
+	B5              BitBoard = 1 << 33
+	C5              BitBoard = 1 << 34
+	D5              BitBoard = 1 << 35
+	E5              BitBoard = 1 << 36
+	F5              BitBoard = 1 << 37
+	G5              BitBoard = 1 << 38
+	H5              BitBoard = 1 << 39
+	A6              BitBoard = 1 << 40
+	B6              BitBoard = 1 << 41
+	C6              BitBoard = 1 << 42
+	D6              BitBoard = 1 << 43
+	E6              BitBoard = 1 << 44
+	F6              BitBoard = 1 << 45
+	G6              BitBoard = 1 << 46
+	H6              BitBoard = 1 << 47
+	A7              BitBoard = 1 << 48
+	B7              BitBoard = 1 << 49
+	C7              BitBoard = 1 << 50
+	D7              BitBoard = 1 << 51
+	E7              BitBoard = 1 << 52
+	F7              BitBoard = 1 << 53
+	G7              BitBoard = 1 << 54
+	H7              BitBoard = 1 << 55
+	A8              BitBoard = 1 << 56
+	B8              BitBoard = 1 << 57
+	C8              BitBoard = 1 << 58
+	D8              BitBoard = 1 << 59
+	E8              BitBoard = 1 << 60
+	F8              BitBoard = 1 << 61
+	G8              BitBoard = 1 << 62
+	H8              BitBoard = 1 << 63
+	RANK_1          BitBoard = 0x00000000000000FF
+	RANK_2          BitBoard = 0x000000000000FF00
+	RANK_3          BitBoard = 0x0000000000FF0000
+	RANK_4          BitBoard = 0x00000000FF000000
+	RANK_5          BitBoard = 0x000000FF00000000
+	RANK_6          BitBoard = 0x0000FF0000000000
+	RANK_7          BitBoard = 0x00FF000000000000
+	RANK_8          BitBoard = 0xFF00000000000000
+	FILE_A          BitBoard = A1 | A2 | A3 | A4 | A5 | A6 | A7 | A8
+	FILE_B          BitBoard = B1 | B2 | B3 | B4 | B5 | B6 | B7 | B8
+	FILE_C          BitBoard = C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8
+	FILE_D          BitBoard = D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8
+	FILE_E          BitBoard = E1 | E2 | E3 | E4 | E5 | E6 | E7 | E8
+	FILE_F          BitBoard = F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8
+	FILE_G          BitBoard = G1 | G2 | G3 | G4 | G5 | G6 | G7 | G8
+	FILE_H          BitBoard = H1 | H2 | H3 | H4 | H5 | H6 | H7 | H8
+	CENTER          BitBoard = E4 | D4 | E5 | D5
+	CENTER_EXPANDED BitBoard = (FILE_C | FILE_D | FILE_E | FILE_F) & (RANK_3 | RANK_4 | RANK_5 | RANK_6)
+	WHITE_HALF      BitBoard = RANK_1 | RANK_2 | RANK_3 | RANK_4
+	BLACK_HALF      BitBoard = RANK_5 | RANK_6 | RANK_7 | RANK_8
+	QUEEN_SIDE      BitBoard = FILE_A | FILE_B | FILE_C | FILE_D
+	KING_SIDE       BitBoard = FILE_E | FILE_F | FILE_G | FILE_H
+	CORNER_A1       BitBoard = A1 | A2 | B1 | B2
+	CORNER_A8       BitBoard = A7 | A8 | B7 | B8
+	CORNER_H1       BitBoard = H1 | H2 | G1 | G2
+	CORNER_H8       BitBoard = H7 | H8 | G7 | G8
+	ALL_CELLS       BitBoard = 0xFFFFFFFFFFFFFFFF
+	DIAGONAL_UP     BitBoard = A1 | B2 | C3 | D4 | E5 | F6 | G7 | H8
+	DIAGONAL_DOWN   BitBoard = A8 | B7 | C6 | D5 | E4 | F3 | G2 | H1
 )
 
 type Piece uint
@@ -143,6 +156,91 @@ func (p *Piece) ToString() string {
 		return " "
 	}
 	return "?"
+}
+
+func (p *Piece) GetMoves(fromCell BitBoard) BitBoard {
+
+	switch *p & All {
+	case Pawn:
+		return GetPawnMoves(fromCell, *p&Black == 0)
+	case Knight:
+		return GetKnightMoves(fromCell)
+	case Bishop:
+		return GetBishopMoves(fromCell)
+	case Rook:
+		return GetRookMoves(fromCell)
+	case Queen:
+		return GetQueenMoves(fromCell)
+	case King:
+		return GetKingMoves(fromCell)
+	}
+	return 0
+}
+
+func GetKingMoves(fromCell BitBoard) BitBoard {
+	var bb BitBoard = 0
+	bb |= (fromCell & (ALL_CELLS ^ RANK_8)) << 8
+	bb |= (fromCell & (ALL_CELLS ^ RANK_1)) >> 8
+	bb |= (fromCell & (ALL_CELLS ^ FILE_H)) << 1
+	bb |= (fromCell & (ALL_CELLS ^ FILE_A)) >> 1
+	bb |= (fromCell & (ALL_CELLS ^ (RANK_8 | FILE_H))) << 9
+	bb |= (fromCell & (ALL_CELLS ^ (RANK_8 | FILE_A))) << 7
+	bb |= (fromCell & (ALL_CELLS ^ (RANK_1 | FILE_H))) >> 7
+	bb |= (fromCell & (ALL_CELLS ^ (RANK_1 | FILE_A))) >> 9
+	return bb
+}
+
+func GetQueenMoves(fromCell BitBoard) BitBoard {
+	return GetRookMoves(fromCell) | GetBishopMoves(fromCell)
+}
+
+func GetBishopMoves(fromCell BitBoard) BitBoard {
+	var bb BitBoard = 0
+	// todo
+	return bb
+}
+
+func GetRookMoves(fromCell BitBoard) BitBoard {
+	var bb BitBoard = 0
+	for rank := RANK_1; rank != 0; rank <<= 8 {
+		if fromCell&rank != 0 {
+			bb |= rank
+		}
+	}
+	for file := FILE_A; file != 0; file <<= 1 {
+		if fromCell&file != 0 {
+			bb |= file
+		}
+	}
+	return bb ^ fromCell
+}
+
+func GetKnightMoves(fromCell BitBoard) BitBoard {
+	var bb BitBoard = 0
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_H | RANK_8 | RANK_7))) << 17
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_A | RANK_8 | RANK_7))) << 15
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_H | FILE_G | RANK_8))) << 10
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_A | FILE_B | RANK_8))) << 6
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_A | RANK_2 | RANK_1))) >> 17
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_H | RANK_2 | RANK_1))) >> 15
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_H | FILE_G | RANK_1))) >> 6
+	bb |= (fromCell & (ALL_CELLS ^ (FILE_A | FILE_B | RANK_1))) >> 10
+	return bb
+}
+
+func GetPawnMoves(fromCell BitBoard, white bool) BitBoard {
+	if white {
+		return GetWhitePawnMoves(fromCell)
+	}
+	return GetBlackPawnMoves(fromCell)
+}
+
+func GetBlackPawnMoves(fromCell BitBoard) BitBoard {
+	return fromCell>>8 | fromCell&RANK_7>>16
+}
+
+func GetWhitePawnMoves(fromCell BitBoard) BitBoard {
+	return fromCell<<8 | fromCell&RANK_2<<16
 }
 
 type ChessBoard struct {
@@ -202,8 +300,11 @@ func (cb *ChessBoard) GetPiece(cell BitBoard) Piece {
 	return None
 }
 
-func (cb *ChessBoard) Print() {
+func (cb *ChessBoard) ToString() string {
+	var sb string = ""
+	sb += "   ------------------------------\n"
 	for row := 7; row >= 0; row-- {
+		sb += fmt.Sprintf("%d |", row+1)
 		for col := 0; col < 8; col++ {
 			// Calculate the cell position
 			cell := BitBoard(1 << (row*8 + col))
@@ -212,22 +313,43 @@ func (cb *ChessBoard) Print() {
 			piece := cb.GetPiece(cell)
 
 			// Print the piece or a placeholder if the cell is empty
-			fmt.Print(piece.ToString() + " ")
+			sb += fmt.Sprint(" " + piece.ToString() + " |")
 		}
-		fmt.Println()
+		sb += "\n   ------------------------------\n"
 	}
+	sb += fmt.Sprintln("    A   B   C   D   E   F   G   H")
+	return sb
+}
+
+func (bb *BitBoard) Visualize() string {
+	var sb string = ""
+	sb += "   ------------------------------\n"
+	for row := 7; row >= 0; row-- {
+		sb += fmt.Sprintf("%d |", row+1)
+		for col := 0; col < 8; col++ {
+			var val string = " "
+			if bb.IsSet(uint(row*8 + col)) {
+				val = "X"
+			}
+			// Print the piece or a placeholder if the cell is empty
+			sb += fmt.Sprint(" " + val + " |")
+		}
+		sb += "\n   ------------------------------\n"
+	}
+	sb += "    A   B   C   D   E   F   G   H"
+	return sb
 }
 
 func NewChessBoard() *ChessBoard {
 	board := ChessBoard{
-		whitePawns:   ROW_2,
+		whitePawns:   RANK_2,
 		whiteKnights: B1 | G1,
 		whiteBishops: C1 | F1,
 		whiteRooks:   A1 | H1,
 		whiteQueens:  D1,
 		whiteKings:   E1,
 
-		blackPawns:   ROW_7,
+		blackPawns:   RANK_7,
 		blackKnights: B8 | G8,
 		blackBishops: C8 | F8,
 		blackRooks:   A8 | H8,
