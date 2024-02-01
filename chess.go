@@ -115,44 +115,50 @@ const (
 type Piece uint
 
 const (
-	Pawn   Piece = 1 << 0
-	Knight       = 1 << 1
-	Bishop       = 1 << 2
-	Rook         = 1 << 3
-	Queen        = 1 << 4
-	King         = 1 << 5
-	Black        = 1 << 6 // flag for determining if the piece is white or black - if flag is set then the piece is black
-	None         = 0
-	All          = Pawn | Knight | Bishop | Rook | Queen | King
+	WHITE_PAWN   Piece = 1 << 0
+	WHITE_KNIGHT Piece = 1 << 1
+	WHITE_BISHOP Piece = 1 << 2
+	WHITE_ROOK   Piece = 1 << 3
+	WHITE_QUEEN  Piece = 1 << 4
+	WHITE_KING   Piece = 1 << 5
+	BLACK_PAWN   Piece = WHITE_PAWN | BLACK_FLAG
+	BLACK_KNIGHT Piece = WHITE_KNIGHT | BLACK_FLAG
+	BLACK_BISHOP Piece = WHITE_BISHOP | BLACK_FLAG
+	BLACK_ROOK   Piece = WHITE_ROOK | BLACK_FLAG
+	BLACK_QUEEN  Piece = WHITE_QUEEN | BLACK_FLAG
+	BLACK_KING   Piece = WHITE_KING | BLACK_FLAG
+	BLACK_FLAG   Piece = 1 << 6 // flag for determining if the piece is white or black - if flag is set then the piece is black
+	NO_PIECE     Piece = 0
+	ALL_PIECES   Piece = WHITE_PAWN | WHITE_KNIGHT | WHITE_BISHOP | WHITE_ROOK | WHITE_QUEEN | WHITE_KING
 )
 
 func (p *Piece) ToString() string {
 	switch *p {
-	case Pawn:
+	case WHITE_PAWN:
 		return "P"
-	case Knight:
+	case WHITE_KNIGHT:
 		return "N"
-	case Bishop:
+	case WHITE_BISHOP:
 		return "B"
-	case Rook:
+	case WHITE_ROOK:
 		return "R"
-	case Queen:
+	case WHITE_QUEEN:
 		return "Q"
-	case King:
+	case WHITE_KING:
 		return "K"
-	case Pawn | Black:
+	case BLACK_PAWN:
 		return "p"
-	case Knight | Black:
+	case BLACK_KNIGHT:
 		return "n"
-	case Bishop | Black:
+	case BLACK_BISHOP:
 		return "b"
-	case Rook | Black:
+	case BLACK_ROOK:
 		return "r"
-	case Queen | Black:
+	case BLACK_QUEEN:
 		return "q"
-	case King | Black:
+	case BLACK_KING:
 		return "k"
-	case None:
+	case NO_PIECE:
 		return " "
 	}
 	return "?"
@@ -160,18 +166,18 @@ func (p *Piece) ToString() string {
 
 func (p *Piece) GetMoves(fromCell BitBoard) BitBoard {
 
-	switch *p & All {
-	case Pawn:
-		return GetPawnMoves(fromCell, *p&Black == 0)
-	case Knight:
+	switch *p & ALL_PIECES {
+	case WHITE_PAWN:
+		return GetPawnMoves(fromCell, *p&BLACK_FLAG == 0)
+	case WHITE_KNIGHT:
 		return GetKnightMoves(fromCell)
-	case Bishop:
+	case WHITE_BISHOP:
 		return GetBishopMoves(fromCell)
-	case Rook:
+	case WHITE_ROOK:
 		return GetRookMoves(fromCell)
-	case Queen:
+	case WHITE_QUEEN:
 		return GetQueenMoves(fromCell)
-	case King:
+	case WHITE_KING:
 		return GetKingMoves(fromCell)
 	}
 	return 0
@@ -293,45 +299,57 @@ type ChessBoard struct {
 	blackKings   BitBoard
 }
 
+func (cb *ChessBoard) GetWhitePieces() BitBoard {
+	return cb.whitePawns | cb.whiteKnights | cb.whiteBishops | cb.whiteRooks | cb.whiteQueens | cb.whiteKings
+}
+
+func (cb *ChessBoard) GetBlackPieces() BitBoard {
+	return cb.blackPawns | cb.blackKnights | cb.blackBishops | cb.blackRooks | cb.blackQueens | cb.blackKings
+}
+
+func (cb *ChessBoard) GetAllPieces() BitBoard {
+	return cb.GetWhitePieces() | cb.GetBlackPieces()
+}
+
 func (cb *ChessBoard) GetPiece(cell BitBoard) Piece {
 	if cb.whitePawns&cell == cell {
-		return Pawn
+		return WHITE_PAWN
 	}
 	if cb.whiteKnights&cell == cell {
-		return Knight
+		return WHITE_KNIGHT
 	}
 	if cb.whiteBishops&cell == cell {
-		return Bishop
+		return WHITE_BISHOP
 	}
 	if cb.whiteRooks&cell == cell {
-		return Rook
+		return WHITE_ROOK
 	}
 	if cb.whiteQueens&cell == cell {
-		return Queen
+		return WHITE_QUEEN
 	}
 	if cb.whiteKings&cell == cell {
-		return King
+		return WHITE_KING
 	}
 
 	if cb.blackPawns&cell == cell {
-		return Pawn | Black
+		return WHITE_PAWN | BLACK_FLAG
 	}
 	if cb.blackKnights&cell == cell {
-		return Knight | Black
+		return WHITE_KNIGHT | BLACK_FLAG
 	}
 	if cb.blackBishops&cell == cell {
-		return Bishop | Black
+		return WHITE_BISHOP | BLACK_FLAG
 	}
 	if cb.blackRooks&cell == cell {
-		return Rook | Black
+		return WHITE_ROOK | BLACK_FLAG
 	}
 	if cb.blackQueens&cell == cell {
-		return Queen | Black
+		return WHITE_QUEEN | BLACK_FLAG
 	}
 	if cb.blackKings&cell == cell {
-		return King | Black
+		return WHITE_KING | BLACK_FLAG
 	}
-	return None
+	return NO_PIECE
 }
 
 func (cb *ChessBoard) ToString() string {
@@ -392,4 +410,320 @@ func NewChessBoard() *ChessBoard {
 	}
 
 	return &board
+}
+
+func (cb *ChessBoard) GetWhitePawnMoves(fromCell BitBoard) BitBoard {
+	var bb BitBoard = 0
+	black := cb.GetBlackPieces()
+	all := cb.GetAllPieces()
+	if fromCell<<8&all == 0 {
+		bb |= fromCell << 8
+		if fromCell&RANK_2 == fromCell && fromCell<<16&all == 0 {
+			bb |= fromCell << 16
+		}
+	}
+	if black&fromCell<<7 == fromCell<<7 {
+		bb |= fromCell << 7
+	}
+	if black&fromCell<<9 == fromCell<<9 {
+		bb |= fromCell << 9
+	}
+	return bb
+}
+
+func (cb *ChessBoard) GetBlackPawnMoves(fromCell BitBoard) BitBoard {
+	var bb BitBoard = 0
+	white := cb.GetWhitePieces()
+	all := cb.GetAllPieces()
+	if fromCell>>8&all == 0 {
+		bb |= fromCell >> 8
+		if fromCell&RANK_7 == fromCell && fromCell>>16&all == 0 {
+			bb |= fromCell >> 16
+		}
+	}
+	if white&fromCell>>7 == fromCell>>7 {
+		bb |= fromCell >> 7
+	}
+	if white&fromCell>>9 == fromCell>>9 {
+		bb |= fromCell >> 9
+	}
+	return bb
+}
+
+func (cb *ChessBoard) GetWhiteKnightMoves(fromCell BitBoard) BitBoard {
+	return GetKnightMoves(fromCell) & (ALL_CELLS ^ cb.GetWhitePieces())
+}
+
+func (cb *ChessBoard) GetBlackKnightMoves(fromCell BitBoard) BitBoard {
+	return GetKnightMoves(fromCell) & (ALL_CELLS ^ cb.GetBlackPieces())
+}
+
+func (cb *ChessBoard) GetWhiteBishopMoves(fromCell BitBoard) BitBoard {
+	return cb.GetBishopMoves(fromCell, cb.GetWhitePieces(), cb.GetBlackPieces())
+}
+
+func (cb *ChessBoard) GetBlackBishopMoves(fromCell BitBoard) BitBoard {
+	return cb.GetBishopMoves(fromCell, cb.GetBlackPieces(), cb.GetWhitePieces())
+}
+
+func (cb *ChessBoard) GetBishopMoves(fromCell BitBoard, hero BitBoard, villain BitBoard) BitBoard {
+	var bb BitBoard = 0
+
+	// up right (<<9)
+	for next := fromCell << 9; next != 0 && FILE_A&next == 0 && next&hero == 0; next <<= 9 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	// up left (<<7)
+	for next := fromCell << 7; next != 0 && FILE_H&next == 0 && next&hero == 0; next <<= 7 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	// down left (>>9)
+	for next := fromCell >> 9; next != 0 && FILE_H&next == 0 && next&hero == 0; next >>= 9 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	// down right (>>7)
+	for next := fromCell >> 7; next != 0 && FILE_H&next == 0 && next&hero == 0; next >>= 7 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	return bb
+}
+
+func (cb *ChessBoard) GetWhiteRookMoves(fromCell BitBoard) BitBoard {
+	return cb.GetRookMoves(fromCell, cb.GetWhitePieces(), cb.GetBlackPieces())
+}
+
+func (cb *ChessBoard) GetBlackRookMoves(fromCell BitBoard) BitBoard {
+	return cb.GetRookMoves(fromCell, cb.GetBlackPieces(), cb.GetWhitePieces())
+}
+
+func (cb *ChessBoard) GetRookMoves(fromCell BitBoard, hero BitBoard, villain BitBoard) BitBoard {
+	var bb BitBoard = 0
+
+	// right (<<1)
+	for next := fromCell << 1; next != 0 && FILE_A&next == 0 && next&hero == 0; next <<= 1 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	// left (>>1)
+	for next := fromCell >> 1; next != 0 && FILE_H&next == 0 && next&hero == 0; next >>= 7 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	// down (>>8)
+	for next := fromCell >> 8; next != 0 && next&hero == 0; next >>= 8 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	// up (<<8)
+	for next := fromCell << 8; next != 0 && next&hero == 0; next <<= 8 {
+		bb |= next
+		if villain&next == next {
+			break
+		}
+	}
+
+	return bb
+}
+
+func (cb *ChessBoard) GetWhiteQueenMoves(fromCell BitBoard) BitBoard {
+	return cb.GetWhiteBishopMoves(fromCell) | cb.GetWhiteRookMoves(fromCell)
+}
+
+func (cb *ChessBoard) GetBlackQueenMoves(fromCell BitBoard) BitBoard {
+	return cb.GetBlackBishopMoves(fromCell) | cb.GetBlackRookMoves(fromCell)
+}
+
+func (cb *ChessBoard) GetWhiteKingMoves(fromCell BitBoard) BitBoard {
+	return GetKingMoves(fromCell) & (ALL_CELLS ^ cb.GetWhitePieces())
+}
+
+func (cb *ChessBoard) GetBlackKingMoves(fromCell BitBoard) BitBoard {
+	return GetKingMoves(fromCell) & (ALL_CELLS ^ cb.GetBlackPieces())
+}
+
+func (cb *ChessBoard) GetMoves(fromCell BitBoard) BitBoard {
+	piece := cb.GetPiece(fromCell)
+	switch piece {
+	case WHITE_PAWN:
+		return cb.GetWhitePawnMoves(fromCell)
+	case WHITE_KNIGHT:
+		return cb.GetWhiteKnightMoves(fromCell)
+	case WHITE_BISHOP:
+		return cb.GetWhiteBishopMoves(fromCell)
+	case WHITE_ROOK:
+		return cb.GetWhiteRookMoves(fromCell)
+	case WHITE_QUEEN:
+		return cb.GetWhiteQueenMoves(fromCell)
+	case WHITE_KING:
+		return cb.GetWhiteKingMoves(fromCell)
+	case BLACK_PAWN:
+		return cb.GetBlackPawnMoves(fromCell)
+	case BLACK_KNIGHT:
+		return cb.GetBlackKnightMoves(fromCell)
+	case BLACK_BISHOP:
+		return cb.GetBlackBishopMoves(fromCell)
+	case BLACK_ROOK:
+		return cb.GetBlackRookMoves(fromCell)
+	case BLACK_QUEEN:
+		return cb.GetBlackQueenMoves(fromCell)
+	case BLACK_KING:
+		return cb.GetBlackKingMoves(fromCell)
+	}
+	return 0
+}
+
+func (cb *ChessBoard) GetLegalMoves(fromCell BitBoard) BitBoard {
+	moves := cb.GetMoves(fromCell)
+
+	piece := cb.GetPiece(fromCell)
+
+	for cell := A1; cell != 0; cell <<= 1 {
+		copy := *cb
+		if cell&moves == cell {
+			copy.MakeMove(fromCell, cell)
+			if piece&BLACK_FLAG == BLACK_FLAG && copy.IsBlackChecked() {
+				moves ^= cell
+			} else if piece&BLACK_FLAG == 0 && copy.IsWhiteChecked() {
+				moves ^= cell
+			}
+		}
+	}
+
+	return moves
+}
+
+func (cb *ChessBoard) GetAllWhiteLegalMoves() BitBoard {
+	var bb BitBoard = 0
+
+	for cell := A1; cell != 0; cell <<= 1 {
+		piece := cb.GetPiece(cell)
+		if piece != NO_PIECE && piece&BLACK_FLAG == 0 {
+			bb |= cb.GetLegalMoves(cell)
+		}
+	}
+	return bb
+}
+
+func (cb *ChessBoard) GetAllBlackLegalMoves() BitBoard {
+	var bb BitBoard = 0
+
+	for cell := A1; cell != 0; cell <<= 1 {
+		piece := cb.GetPiece(cell)
+		if piece != NO_PIECE && piece&BLACK_FLAG == BLACK_FLAG {
+			bb |= cb.GetLegalMoves(cell)
+		}
+	}
+	return bb
+}
+
+func (cb *ChessBoard) IsBlackChecked() bool {
+	for cell := A1; cell != 0; cell <<= 1 {
+		piece := cb.GetPiece(cell)
+		if piece&BLACK_FLAG == 0 {
+			if cb.blackKings&cb.GetMoves(cell) == cb.blackKings {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (cb *ChessBoard) IsWhiteChecked() bool {
+	for cell := A1; cell != 0; cell <<= 1 {
+		piece := cb.GetPiece(cell)
+		if piece&BLACK_FLAG == BLACK_FLAG {
+			if cb.whiteKings&cb.GetMoves(cell) == cb.whiteKings {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (cb *ChessBoard) IsWhiteCheckMated() bool {
+	return cb.IsWhiteChecked() && cb.GetAllWhiteLegalMoves() == 0
+}
+
+func (cb *ChessBoard) IsBlackCheckMated() bool {
+	return cb.IsBlackChecked() && cb.GetAllBlackLegalMoves() == 0
+}
+
+func (cb *ChessBoard) IsWhiteStaleMated() bool {
+	return !cb.IsWhiteChecked() && cb.GetAllWhiteLegalMoves() == 0
+}
+
+func (cb *ChessBoard) IsBlackStaleMated() bool {
+	return !cb.IsBlackChecked() && cb.GetAllBlackLegalMoves() == 0
+}
+
+func (cb *ChessBoard) MakeMove(fromCell BitBoard, toCell BitBoard) {
+	moves := cb.GetMoves(fromCell)
+	if toCell&moves != toCell {
+		return // todo: error
+	}
+	mask := ALL_CELLS ^ (fromCell | toCell)
+	piece := cb.GetPiece(fromCell)
+	cb.whitePawns &= mask
+	cb.whiteKnights &= mask
+	cb.whiteBishops &= mask
+	cb.whiteRooks &= mask
+	cb.whiteQueens &= mask
+	cb.whiteKings &= mask
+	cb.blackPawns &= mask
+	cb.blackKnights &= mask
+	cb.blackBishops &= mask
+	cb.blackRooks &= mask
+	cb.blackQueens &= mask
+	cb.blackKings &= mask
+	switch piece {
+	case WHITE_PAWN:
+		cb.whitePawns |= toCell
+	case WHITE_KNIGHT:
+		cb.whiteKnights |= toCell
+	case WHITE_BISHOP:
+		cb.whiteBishops |= toCell
+	case WHITE_ROOK:
+		cb.whiteRooks |= toCell
+	case WHITE_QUEEN:
+		cb.whiteQueens |= toCell
+	case WHITE_KING:
+		cb.whiteKings |= toCell
+	case BLACK_PAWN:
+		cb.blackPawns |= toCell
+	case BLACK_KNIGHT:
+		cb.blackKings |= toCell
+	case BLACK_BISHOP:
+		cb.blackBishops |= toCell
+	case BLACK_ROOK:
+		cb.blackRooks |= toCell
+	case BLACK_QUEEN:
+		cb.blackQueens |= toCell
+	case BLACK_KING:
+		cb.blackKings |= toCell
+	}
 }
